@@ -37,8 +37,11 @@ fn main() {
         let line = line.unwrap();
         if line.contains("GESTURE_") {
             // event10  GESTURE_SWIPE_UPDATE +3.769s	4  0.25/ 0.48 ( 0.95/ 1.85 unaccelerated)
-            let parts: Vec<&str> = pattern.split(&line).filter(|c| !c.is_empty()).collect();
+            let mut parts: Vec<&str> = pattern.split(&line).filter(|c| !c.is_empty()).collect();
             let action = parts[1];
+            if action == "GESTURE_SWIPE_UPDATE" && parts.len() != 9 {
+                parts.remove(2);
+            }
             let finger = parts[3];
             if finger != "3" && !action.starts_with("GESTURE_HOLD"){
                 xdo_handler.mouse_up(1);
